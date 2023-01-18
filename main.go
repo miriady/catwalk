@@ -1,5 +1,4 @@
-The MIT License (MIT)
-
+/*
 Copyright © 2023 Miriady, catwalk authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,58 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/urfave/cli/v2"
+	log "golang.org/x/exp/slog"
+
+	"github.com/miriady/catwalk/cmd"
+	"github.com/miriady/catwalk/version"
+)
+
+func main() {
+	// listen for SIGINT and SIGTERM and gracefully shutdown
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		sig := make(chan os.Signal, 1)
+		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+		<-sig
+		log.Debug("received signal, shutting down")
+		cancel()
+	}()
+
+	app := &cli.App{
+		Name:    "catwalk",
+		Usage:   "a simple IOT identity and update server",
+		Action:  actionMain,
+		Version: version.Version,
+		Commands: []*cli.Command{
+			cmd.VersionCommand,
+		},
+	}
+
+	app.RunContext(ctx, os.Args)
+}
+
+func actionMain(ctx *cli.Context) error {
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("bye")
+			return nil
+		case <-time.After(time.Second):
+			// do something
+			log.Debug("tick")
+		}
+	}
+}
