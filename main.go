@@ -58,7 +58,11 @@ func main() {
 		},
 	}
 
-	app.RunContext(ctx, os.Args)
+	err := app.RunContext(ctx, os.Args)
+	if err != nil {
+		log.Error("failed to run app", err)
+		os.Exit(1)
+	}
 }
 
 func actionMain(ctx *cli.Context) error {
