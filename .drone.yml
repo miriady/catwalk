@@ -15,7 +15,6 @@ steps:
 
 trigger:
   event:
-    - push
     - pull_request
 
 ---
@@ -36,7 +35,6 @@ steps:
 
 trigger:
   event:
-    - push
     - pull_request
 
 ---
