@@ -1,0 +1,23 @@
+name: "Maintenance"
+description: Create a new ticket for a new feature request
+title: "<title>"
+labels: [
+  "Type: Maintenance"
+]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Summary"
+      description: Provide a brief explanation of what needs to be done.
+      placeholder: Describe in a few lines what changes are needed.
+    validations:
+      required: true
+  - type: textarea
+    id: basic_example
+    attributes:
+      label: "Explanation"
+      description: Indicate here some why this change is needed.
+      placeholder: A few specific words about this request.
+    validations:
+      required: true

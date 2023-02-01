@@ -1,5 +1,6 @@
-The MIT License (MIT)
+//go:build integration
 
+/*
 Copyright © 2023 Miriady, catwalk authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +20,40 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+
+package integration_test
+
+import (
+	"bytes"
+	"os/exec"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
+
+var _ = Describe("Validating if static subcommands works as intended", Label("subcmd:version"), func() {
+	Context("subcommand 'version'", func() {
+		It("should return version information", func(ctx SpecContext) {
+			By("running the app with subcommand 'version'")
+
+			cmd := exec.Command("./build/catwalk", "version")
+
+			outBuf := new(bytes.Buffer)
+			errBuf := new(bytes.Buffer)
+			cmd.Stdout = outBuf
+			cmd.Stderr = errBuf
+			cmd.Dir = "../.."
+
+			err := cmd.Run()
+			Expect(err).NotTo(HaveOccurred())
+
+			By("checking the output")
+			Expect(outBuf.String()).To(ContainSubstring("catwalk"))
+			Expect(outBuf.String()).To(ContainSubstring("Commit"))
+			Expect(outBuf.String()).To(ContainSubstring("CommitTime"))
+			Expect(outBuf.String()).To(ContainSubstring("Modified"))
+			Expect(outBuf.String()).To(ContainSubstring("GoVersion"))
+		})
+	})
+})

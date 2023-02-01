@@ -1,0 +1,92 @@
+kind: pipeline
+type: docker
+name: static check
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: golang-ci validation
+    image: docker.io/golangci/golangci-lint:latest
+    commands:
+      - go mod download
+      - golangci-lint run -v
+
+trigger:
+  event:
+    - pull_request
+
+---
+
+kind: pipeline
+type: docker
+name: test
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: run tests
+    image: docker.io/library/golang:1.19
+    commands:
+      - make test
+
+trigger:
+  event:
+    - pull_request
+
+---
+
+kind: pipeline
+type: docker
+name: release
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: fetch
+    image: docker:git
+    commands:
+      - git fetch --tags
+
+  - name: test
+    image: docker.io/library/golang:1.19
+    environment:
+      CODECOV_TOKEN:
+        from_secret: codecov_token
+    commands:
+      - make test
+      - curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - chmod +x codecov
+      - ./codecov
+
+  - name: release
+    image: docker.io/goreleaser/goreleaser
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token
+    commands:
+      - goreleaser release --rm-dist
+
+  - name: oci-build
+    image: quay.io/buildah/stable:latest
+    privileged: true
+    environment:
+      REGISTRY: ghcr.io
+      REPOSITORY: miriady
+      IMAGE_NAME: catwalk
+      IMAGE_TAG: ${CI_COMMIT_TAG}
+      ROBOT_USERNAME:
+        from_secret: robot_username
+      ROBOT_PASSWORD:
+        from_secret: robot_password
+    commands:
+      - ./scripts/oci-build.sh
+
+trigger:
+  event:
+    - tag

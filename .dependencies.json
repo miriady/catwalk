@@ -1,0 +1,33 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Shanduur/ensure/main/internal/dependencies/dependencies.schema.json",
+    "installers": [
+        { "name": "apt" }, { "name": "brew" }, { "name": "dnf" }
+    ],
+    "packages": [
+        {
+            "executable": "git",
+            "package_name": {
+                "apt": "git",
+                "brew": "git",
+                "dnf": "git"
+            }
+        },
+        {
+            "executable": "make",
+            "package_name": {
+                "apt": "make",
+                "brew": "make",
+                "dnf": "make"
+            }
+        },
+        {
+            "executable": "go",
+            "package_name": {
+                "apt": "golang",
+                "brew": "go",
+                "dnf": "golang"
+            }
+        }
+    ],
+    "file": []
+}
