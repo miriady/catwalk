@@ -18,10 +18,6 @@ repos:
     hooks:
       - id: golangci-lint
         stages: [commit]
-  - repo: https://github.com/yoheimuta/protolint
-    rev: v0.42.0
-    hooks:
-      - id: protolint
   - repo: https://github.com/koalaman/shellcheck-precommit
     rev: v0.8.0
     hooks:

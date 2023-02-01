@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright © 2023  Miriady, catwalk authors
+# Full license text is available in the LICENSE file
 
 # This script is used to build a multi-architecture container image
 set -a

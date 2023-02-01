@@ -1,5 +1,4 @@
 ## What type of PR is this?
-
 <!--
 Add one of the following kinds:
 feature, hotfix, tests, documentation, other
@@ -24,7 +23,6 @@ Fixes #
 <!-- REPLACE ME WITH CONTENT -->
 
 ## Additional documentation e.g., enhancement proposals, usage docs, etc.:
-
 <!--
 This section can be blank if this pull request does not require a release note.
 -->

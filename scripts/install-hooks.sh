@@ -1,5 +1,5 @@
 #!/bin/bash -aex
-# Copyright © 2023 Silesian Aerospace Technologies, GCS Authors
+# Copyright © 2023  Miriady, catwalk authors
 # Full license text is available in the LICENSE file
 
 pre-commit install --hook-type pre-commit

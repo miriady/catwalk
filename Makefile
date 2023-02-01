@@ -41,6 +41,10 @@ docs:
 e2e:
 	TEST_MODE="-tags=e2e" make test
 
+.PHONY: integration-test
+integration-test: build
+	cd test && make integration-test
+
 .PHONY: test
 test:
 	${GO} test ${TEST_MODE} \
